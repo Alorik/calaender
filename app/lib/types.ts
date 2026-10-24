@@ -1,17 +1,53 @@
-/** One calendar in the side panel ("Work", "Personal", …). */
-export interface CalendarSource {
+/** A person in the firm; each has a calendar with its own colour. */
+export interface Person {
   id: string;
   name: string;
+  initials: string;
+  role: string;
+  /** Calendar colour: checkbox, avatar text, event stripe. */
   color: string;
-  visible: boolean;
+  /** Avatar fill (about 16% tint). */
+  avatarBg: string;
+  /** Event fill (about 15% tint). */
+  eventBg: string;
+  /** Event left stripe (the colour, or a softer one for your own calendar). */
+  stripe: string;
+  /** Busy block in the availability strip. */
+  busy: string;
 }
 
-export type Repeat = "none" | "daily" | "weekdays" | "weekly" | "monthly" | "yearly";
+export interface CaseInfo {
+  id: string;
+  /** Short name used across the calendar: "Martinez v. Rose". */
+  name: string;
+  /** Full caption on case cards: "Bezty Martinez v. Rachel Rose". */
+  fullName: string;
+  /** "PI-2026-0418 · Auto Accident · Litigation". */
+  meta: string;
+}
+
+export interface Task {
+  id: string;
+  caseId: string;
+  title: string;
+}
+
+export type Rsvp = "yes" | "no" | "maybe" | "pending";
+
+/** A guest: someone in the firm (personId) or an outside person. */
+export interface Guest {
+  personId?: string;
+  name?: string;
+  role?: string;
+  rsvp: Rsvp;
+}
+
+export type Repeat = "none" | "daily" | "weekdays" | "weekly" | "monthly";
+export type Visibility = "firm" | "private";
 
 /**
- * One event as the app stores it. Times are local wall-clock strings:
- * "2026-10-24T09:30" for timed events, "2026-10-24" for all-day ones (end is
- * exclusive, as in Google Calendar and FullCalendar).
+ * One event. Times are local wall-clock strings: "2026-10-23T09:30" for timed
+ * events, "2026-10-23" for all-day ones (end exclusive).
  */
 export interface CalEvent {
   id: string;
@@ -19,22 +55,20 @@ export interface CalEvent {
   start: string;
   end: string;
   allDay: boolean;
-  calendarId: string;
-  /** Own colour; otherwise the calendar's. */
-  color?: string;
+  /** Whose calendar it is on (the organizer). */
+  ownerId: string;
+  guests: Guest[];
+  caseId?: string;
+  taskId?: string;
   location?: string;
   description?: string;
-  guests?: string[];
   videoLink?: string;
-  /** Minutes before the start; null = no reminder. */
-  reminder?: number | null;
+  /** Minutes before; null = none. */
+  reminder: number | null;
+  visibility: Visibility;
   repeat: Repeat;
+  /** Deadlines (SOL, filing) show in red. */
+  kind?: "deadline";
 }
 
-export type ViewType =
-  | "timeGridDay"
-  | "timeGridWeek"
-  | "dayGridMonth"
-  | "timeGridFourDay"
-  | "listSchedule"
-  | "multiMonthYear";
+export type ViewType = "timeGridDay" | "timeGridWeek" | "dayGridMonth";

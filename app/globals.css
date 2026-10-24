@@ -1,231 +1,269 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #1f1f1f;
-}
-
+/* Colours and shadows from the Figma Calendar UI (Saloni Designs <> Alphalaw). */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-ink: #020303;
+  --color-ink-2: #3f4040;
+  --color-ink-3: #7c7c7c;
+  --color-ink-4: #9b9b9a;
+  --color-ink-5: #c7c6c6;
+  --color-line: #e7e6e5;
+  --color-line-2: #dededd;
+  --color-line-3: #efeeed;
+  --color-border: #d8d7d6;
+  --color-field: #fcfcfc;
+  --color-chip: #f0eeed;
+  --color-soft: #f6f5f5;
+  --color-canvas: #efeeed;
+
+  --color-brand: #002421;
+  --color-green: #17a34a;
+  --color-green-ink: #004e1f;
+  --color-green-link: #008234;
+  --color-green-tint: #ecfef3;
+  --color-green-line: #bbf0cf;
+  --color-green-soft: #daf0e2;
+
+  --color-shell: #131c19;
+  --color-danger: #d92d20;
+  --color-danger-tint: #fdecec;
+  --color-now: #f5484d;
+
+  --shadow-pop: 0 12px 32px rgba(0, 0, 0, 0.16);
+  --shadow-dialog: 0 24px 64px rgba(0, 0, 0, 0.22);
+}
+
+html,
+body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-shell);
+  color: var(--color-ink);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
-/* ── FullCalendar in Google Calendar's look ─────────────────────────────── */
+/* ── FullCalendar in the Figma look ─────────────────────────────────────── */
 
 .fc {
-  --fc-border-color: #e5e7eb;
+  --fc-border-color: var(--color-line);
   --fc-today-bg-color: transparent;
-  --fc-now-indicator-color: #ea4335;
+  --fc-now-indicator-color: var(--color-now);
   --fc-page-bg-color: #fff;
-  --fc-neutral-bg-color: #f8fafd;
-  --fc-list-event-hover-bg-color: #f1f3f4;
-  --fc-highlight-color: rgba(26, 115, 232, 0.12);
-  --fc-event-text-color: #fff;
+  --fc-neutral-bg-color: #fff;
+  --fc-highlight-color: rgba(23, 163, 74, 0.14);
+  --fc-small-font-size: 11px;
   font-size: 12px;
+  height: 100%;
 }
 
 .fc .fc-scrollgrid {
+  border: 0;
+}
+.fc .fc-scrollgrid-section > * {
   border-left: 0;
-  border-top: 0;
+}
+.fc th,
+.fc td {
+  border-color: var(--color-line);
 }
 
-/* Day / Week header: "MON" over a big date; today in a blue circle. */
+/* Day headers (Figma "Day headers"): weekday 11px over the date 20px; today in a green circle. */
 .fc .fc-col-header-cell {
   border-left-color: transparent;
   border-right-color: transparent;
+  border-bottom: 0;
 }
 .fc .fc-col-header-cell-cushion {
-  padding: 6px 0 8px;
-  color: #3c4043;
-  font-weight: 500;
+  padding: 6px 0;
   text-decoration: none;
 }
-.gc-day-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-.gc-weekday {
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  color: #70757a;
-}
-.gc-date {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 46px;
-  height: 46px;
-  border-radius: 9999px;
-  font-size: 26px;
-  font-weight: 400;
-  color: #3c4043;
-}
-.fc .fc-col-header-cell-cushion:hover .gc-date:not(.gc-today) {
-  background: #f1f3f4;
-}
-.gc-today {
-  background: #1a73e8;
-  color: #fff;
-}
-.gc-today-text {
-  color: #1a73e8;
+.fc .fc-timegrid-axis {
+  border-color: transparent;
 }
 
-/* Hour labels on the left. */
-.fc .fc-timegrid-slot-label-cushion {
+/* The corner above the hours shows the time zone ("GMT-7"). */
+.fc .fc-col-header .fc-timegrid-axis {
+  vertical-align: bottom;
+}
+.fc .fc-col-header .fc-timegrid-axis-frame::after {
+  content: var(--tz-label, "");
   font-size: 10px;
-  color: #70757a;
-  padding-right: 8px;
-  position: relative;
-  top: -0.75em;
+  font-weight: 500;
+  line-height: 12px;
+  color: var(--color-ink-3);
+  padding: 0 0 6px 14px;
+  display: block;
+}
+
+/* All-day row. */
+.fc .fc-timegrid-axis-cushion {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--color-ink-3);
+  max-width: none;
+  padding-left: 14px;
+}
+.fc .fc-timegrid-all-day-cushion {
+  text-align: left;
+}
+.fc .fc-daygrid-body-natural .fc-daygrid-day-events {
+  margin-bottom: 4px;
+}
+.fc .fc-timegrid .fc-daygrid-body {
+  border-bottom: 1px solid var(--color-line-2);
+}
+.fc .fc-timegrid-divider {
+  display: none;
+}
+
+/* Hour rows: 64px an hour, only the hour lines (#efeeed), labels 10px on the left. */
+.fc .fc-timegrid-slot {
+  height: 32px;
+  border-top-color: var(--color-line-3);
+}
+.fc .fc-timegrid-slot-minor {
+  border-top-style: none;
 }
 .fc .fc-timegrid-slot-label {
   border: 0;
   vertical-align: top;
 }
-.fc .fc-timegrid-slot-minor {
-  border-top-style: none;
-}
-.fc .fc-timegrid-slot {
-  height: 24px;
-}
-.fc .fc-timegrid-axis-cushion {
+.fc .fc-timegrid-slot-label-cushion {
   font-size: 10px;
-  color: #70757a;
+  line-height: 12px;
+  color: var(--color-ink-3);
+  padding-right: 8px;
+  position: relative;
+  top: -6px;
+}
+.fc .fc-timegrid-axis,
+.fc .fc-timegrid-slot-label {
+  width: 64px;
 }
 
-/* Now line with a dot, as in Google. */
+/* Weekend columns are shaded (Figma "Weekend shade"). */
+.fc .fc-timegrid-col.fc-day-sat,
+.fc .fc-timegrid-col.fc-day-sun,
+.fc .fc-daygrid-day.fc-day-sat,
+.fc .fc-daygrid-day.fc-day-sun {
+  background: var(--color-field);
+}
+
+/* Now line: red with a dot. */
 .fc .fc-timegrid-now-indicator-line {
-  border-width: 2px 0 0;
+  border-width: 1.5px 0 0;
 }
 .fc .fc-timegrid-now-indicator-arrow {
   border: 0;
-  width: 12px;
-  height: 12px;
-  margin-top: -6px;
-  margin-left: -6px;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
   border-radius: 9999px;
   background: var(--fc-now-indicator-color);
-  left: auto;
+  left: 59px;
 }
 
-/* Events: rounded blocks with white text. */
-.fc .fc-event {
-  border-radius: 4px;
-  font-weight: 500;
-  cursor: pointer;
+/* Events: the card is drawn by our eventContent; FullCalendar's box stays plain. */
+.fc .fc-event,
+.fc .fc-event:focus {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
 }
-.fc-timegrid-event .fc-event-main {
-  padding: 2px 6px;
+.fc .fc-event-main {
+  padding: 0;
+  color: inherit;
 }
-.fc-timegrid-event .fc-event-title {
-  font-weight: 500;
+.fc .fc-timegrid-event-harness-inset .fc-timegrid-event {
+  box-shadow: none;
 }
-.fc-timegrid-event .fc-event-time {
-  font-weight: 400;
+.fc .fc-timegrid-col-events {
+  margin: 0 3px 0 2px;
+}
+.fc .fc-timegrid-event {
+  border-radius: 6px;
+}
+.fc .fc-timegrid-event-harness + .fc-timegrid-event-harness .cal-event {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.fc .fc-event-mirror .cal-event {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
   opacity: 0.95;
 }
-.fc-v-event {
-  border-width: 0;
-  box-shadow: 0 0 0 1px #fff;
+.fc .fc-event-dragging .cal-event {
+  outline: 2px solid var(--color-green);
 }
-.fc .fc-h-event {
-  border-width: 0;
-  padding: 1px 4px;
+.fc .fc-daygrid-event-harness {
+  margin: 0 4px 2px;
 }
-.fc .fc-event-mirror {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+.fc .fc-h-event .fc-event-main-frame {
+  display: block;
 }
 
-/* Month view: day numbers at the top centre, today in a blue circle. */
+/* Month view. */
 .fc .fc-daygrid-day-top {
   justify-content: center;
 }
 .fc .fc-daygrid-day-number {
-  margin-top: 4px;
-  min-width: 24px;
-  height: 24px;
-  padding: 0 4px;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 500;
-  color: #3c4043;
+  padding: 6px 0 4px;
   text-decoration: none;
 }
-.fc .fc-daygrid-day-number:hover {
-  background: #f1f3f4;
-}
-.fc .fc-day-today .fc-daygrid-day-number {
-  background: #1a73e8;
-  color: #fff;
-}
-.fc .fc-day-other .fc-daygrid-day-number {
-  color: #9aa0a6;
-}
 .fc .fc-daygrid-dot-event {
-  color: #3c4043;
-  border-radius: 4px;
+  padding: 0;
 }
 .fc .fc-daygrid-dot-event:hover {
-  background: #f1f3f4;
-}
-.fc .fc-daygrid-dot-event .fc-event-title {
-  font-weight: 500;
+  background: var(--color-soft);
 }
 .fc .fc-daygrid-more-link {
-  color: #3c4043;
+  font-size: 11px;
   font-weight: 500;
-  padding: 0 4px;
+  color: var(--color-ink-2);
+  padding-left: 4px;
+}
+.fc .fc-dayGridMonth-view .fc-col-header-cell-cushion {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-ink-3);
+  padding: 10px 0;
+}
+.fc .fc-dayGridMonth-view .fc-col-header-cell {
+  border-bottom: 1px solid var(--color-line);
 }
 .fc .fc-popover {
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  border: 0;
+  border: 1px solid var(--color-line);
+  box-shadow: var(--shadow-pop);
   overflow: hidden;
 }
-
-/* Year view. */
-.fc .fc-multimonth {
-  border: 0;
-}
-.fc .fc-multimonth-title {
-  font-size: 14px;
-  font-weight: 500;
-  color: #3c4043;
-  text-align: left;
-  padding-left: 12px;
-}
-
-/* Schedule (list) view. */
-.fc .fc-list {
-  border: 0;
-}
-.fc .fc-list-day-cushion {
+.fc .fc-popover-header {
   background: #fff;
-  font-size: 13px;
-  color: #3c4043;
-}
-.fc .fc-list-event td {
-  border-color: transparent;
-  font-size: 13px;
-}
-.fc .fc-list-event-dot {
-  border-width: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 10px;
 }
 
 .fc a {
   color: inherit;
+}
+
+/* Scrollbars inside the grid. */
+.fc .fc-scroller::-webkit-scrollbar {
+  width: 6px;
+}
+.fc .fc-scroller::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 9999px;
+}
+
+/* Day view: the date sits at the left (Figma 1.2). */
+.fc .fc-timeGridDay-view th.fc-col-header-cell {
+  text-align: left;
+}
+.fc .fc-timeGridDay-view .fc-col-header-cell-cushion {
+  display: block;
 }
