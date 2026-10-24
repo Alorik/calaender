@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1f1f1f;
 }
 
 @theme inline {
@@ -12,15 +12,220 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+/* ── FullCalendar in Google Calendar's look ─────────────────────────────── */
+
+.fc {
+  --fc-border-color: #e5e7eb;
+  --fc-today-bg-color: transparent;
+  --fc-now-indicator-color: #ea4335;
+  --fc-page-bg-color: #fff;
+  --fc-neutral-bg-color: #f8fafd;
+  --fc-list-event-hover-bg-color: #f1f3f4;
+  --fc-highlight-color: rgba(26, 115, 232, 0.12);
+  --fc-event-text-color: #fff;
+  font-size: 12px;
+}
+
+.fc .fc-scrollgrid {
+  border-left: 0;
+  border-top: 0;
+}
+
+/* Day / Week header: "MON" over a big date; today in a blue circle. */
+.fc .fc-col-header-cell {
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+.fc .fc-col-header-cell-cushion {
+  padding: 6px 0 8px;
+  color: #3c4043;
+  font-weight: 500;
+  text-decoration: none;
+}
+.gc-day-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.gc-weekday {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #70757a;
+}
+.gc-date {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 9999px;
+  font-size: 26px;
+  font-weight: 400;
+  color: #3c4043;
+}
+.fc .fc-col-header-cell-cushion:hover .gc-date:not(.gc-today) {
+  background: #f1f3f4;
+}
+.gc-today {
+  background: #1a73e8;
+  color: #fff;
+}
+.gc-today-text {
+  color: #1a73e8;
+}
+
+/* Hour labels on the left. */
+.fc .fc-timegrid-slot-label-cushion {
+  font-size: 10px;
+  color: #70757a;
+  padding-right: 8px;
+  position: relative;
+  top: -0.75em;
+}
+.fc .fc-timegrid-slot-label {
+  border: 0;
+  vertical-align: top;
+}
+.fc .fc-timegrid-slot-minor {
+  border-top-style: none;
+}
+.fc .fc-timegrid-slot {
+  height: 24px;
+}
+.fc .fc-timegrid-axis-cushion {
+  font-size: 10px;
+  color: #70757a;
+}
+
+/* Now line with a dot, as in Google. */
+.fc .fc-timegrid-now-indicator-line {
+  border-width: 2px 0 0;
+}
+.fc .fc-timegrid-now-indicator-arrow {
+  border: 0;
+  width: 12px;
+  height: 12px;
+  margin-top: -6px;
+  margin-left: -6px;
+  border-radius: 9999px;
+  background: var(--fc-now-indicator-color);
+  left: auto;
+}
+
+/* Events: rounded blocks with white text. */
+.fc .fc-event {
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.fc-timegrid-event .fc-event-main {
+  padding: 2px 6px;
+}
+.fc-timegrid-event .fc-event-title {
+  font-weight: 500;
+}
+.fc-timegrid-event .fc-event-time {
+  font-weight: 400;
+  opacity: 0.95;
+}
+.fc-v-event {
+  border-width: 0;
+  box-shadow: 0 0 0 1px #fff;
+}
+.fc .fc-h-event {
+  border-width: 0;
+  padding: 1px 4px;
+}
+.fc .fc-event-mirror {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Month view: day numbers at the top centre, today in a blue circle. */
+.fc .fc-daygrid-day-top {
+  justify-content: center;
+}
+.fc .fc-daygrid-day-number {
+  margin-top: 4px;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 4px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: #3c4043;
+  text-decoration: none;
+}
+.fc .fc-daygrid-day-number:hover {
+  background: #f1f3f4;
+}
+.fc .fc-day-today .fc-daygrid-day-number {
+  background: #1a73e8;
+  color: #fff;
+}
+.fc .fc-day-other .fc-daygrid-day-number {
+  color: #9aa0a6;
+}
+.fc .fc-daygrid-dot-event {
+  color: #3c4043;
+  border-radius: 4px;
+}
+.fc .fc-daygrid-dot-event:hover {
+  background: #f1f3f4;
+}
+.fc .fc-daygrid-dot-event .fc-event-title {
+  font-weight: 500;
+}
+.fc .fc-daygrid-more-link {
+  color: #3c4043;
+  font-weight: 500;
+  padding: 0 4px;
+}
+.fc .fc-popover {
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  border: 0;
+  overflow: hidden;
+}
+
+/* Year view. */
+.fc .fc-multimonth {
+  border: 0;
+}
+.fc .fc-multimonth-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #3c4043;
+  text-align: left;
+  padding-left: 12px;
+}
+
+/* Schedule (list) view. */
+.fc .fc-list {
+  border: 0;
+}
+.fc .fc-list-day-cushion {
+  background: #fff;
+  font-size: 13px;
+  color: #3c4043;
+}
+.fc .fc-list-event td {
+  border-color: transparent;
+  font-size: 13px;
+}
+.fc .fc-list-event-dot {
+  border-width: 6px;
+}
+
+.fc a {
+  color: inherit;
 }
